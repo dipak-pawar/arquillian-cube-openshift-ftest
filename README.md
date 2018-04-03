@@ -7,3 +7,9 @@ This is Hello World app written using spring-boot.
 ```bash
 mvn spring-boot:run
 ```
+
+## How to run Test?
+
+```bash
+mvn clean verify -Popenshift
+```

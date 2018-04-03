@@ -10,6 +10,12 @@
 
   <properties>
     <version.spring.boot>2.0.0.RELEASE</version.spring.boot>
+
+    <version.restassured>3.0.6</version.restassured>
+    <version.fabric8.maven.plugin>3.5.38</version.fabric8.maven.plugin>
+    <version.arquillian.cube>1.15.3</version.arquillian.cube>
+    <version.failsafe.plugin>2.21.0</version.failsafe.plugin>
+    <version.junit>4.12</version.junit>
   </properties>
 
   <dependencyManagement>
@@ -31,8 +37,21 @@
     </dependency>
 
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.junit}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.arquillian.cube</groupId>
+      <artifactId>arquillian-cube-openshift-starter</artifactId>
+      <version>${version.arquillian.cube}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>${version.restassured}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -44,8 +63,43 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>${version.spring.boot}</version>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${version.failsafe.plugin}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>openshift</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric8-maven-plugin</artifactId>
+            <version>${version.fabric8.maven.plugin}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>resource</goal>
+                  <goal>build</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
